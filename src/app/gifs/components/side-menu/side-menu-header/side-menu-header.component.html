@@ -1,11 +1,13 @@
 <div id="logo" class="my-4 px-6">
   <h1 class="font-bold text-white text-lg md:text-2xl">
-    Dash<span class="text-blue-500">8</span>.
+    {{ envs.companyName
+    }}<span class="text-blue-500">{{ envs.companyName2 }}</span
+    >.
   </h1>
-  <p class="text-slate-500 text-sm">Manage your actions and activities</p>
+  <p class="text-slate-500 text-sm">{{ envs.companySlogan }}</p>
 </div>
 <div id="profile" class="px-6 py-10">
-  <p class="text-slate-500">Welcome back,</p>
+  <p class="text-slate-500">Bienvenido,</p>
   <a href="#" class="inline-flex items-center space-x-2">
     <span>
       <img
@@ -14,6 +16,6 @@
         alt=""
       />
     </span>
-    <span class="font-bold text-sm md:text-base"> Edward Tompson </span>
+    <span class="font-bold text-sm md:text-base"> Luciano Figueroa </span>
   </a>
 </div>
