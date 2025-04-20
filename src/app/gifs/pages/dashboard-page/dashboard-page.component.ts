@@ -2,10 +2,8 @@ import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
 @Component({
-  selector: 'app-root',
+  selector: 'gifs-dashboard-page',
   imports: [RouterOutlet],
-  templateUrl: './app.component.html',
+  templateUrl: './dashboard-page.component.html',
 })
-export class AppComponent {
-  title = 'gifs-app';
-}
+export default class DashboardPageComponent {}
