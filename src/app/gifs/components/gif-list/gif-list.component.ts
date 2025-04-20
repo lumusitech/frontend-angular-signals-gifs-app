@@ -1,4 +1,5 @@
 import { Component, input } from '@angular/core';
+
 import { Gif } from '../../interfaces/gif.interface';
 import { GifListItemComponent } from './gif-list-item/gif-list-item.component';
 

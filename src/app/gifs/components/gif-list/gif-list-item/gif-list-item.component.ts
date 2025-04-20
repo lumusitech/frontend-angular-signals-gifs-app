@@ -7,6 +7,6 @@ import { Component, input } from '@angular/core';
   styles: ``,
 })
 export class GifListItemComponent {
-  src = input.required<string>();
-  alt = input.required<string>();
+  title = input.required<string>();
+  url = input.required<string>();
 }

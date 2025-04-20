@@ -1,8 +1,9 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { GifListComponent } from '../../components/gif-list/gif-list.component';
-import { Gif } from '../../interfaces/gif.interface';
 
-const fakeGifs: Gif[] = [
+import { GifService } from '../../services/gif.service';
+
+const fakeGifs = [
   {
     id: '0',
     src: 'image.jpg',
@@ -72,5 +73,5 @@ const fakeGifs: Gif[] = [
   styles: ``,
 })
 export default class TrendingPageComponent {
-  gifs = signal(fakeGifs);
+  gifService = inject(GifService);
 }
