@@ -19,9 +19,8 @@ export class GifService {
   trendingGifsLoading = signal(true);
 
   historySearch = signal<HistorySearchItem[]>([]);
-  searchResults = signal<Gif[]>([]);
-
-  menuHistory = signal<string[]>([]);
+  historyMenu = signal<string[]>([]);
+  gifs = signal<Gif[]>([]);
 
   constructor() {
     this.loadTrendingGifs();
@@ -61,7 +60,7 @@ export class GifService {
         })
         .subscribe((resp) => {
           const gifs = GifMapper.mapGiphyItemsToGifArray(resp.data);
-          this.searchResults.set(gifs);
+          this.gifs.set(gifs);
 
           // update history
           this.updateHistory(cleanQuery, gifs);
@@ -81,7 +80,7 @@ export class GifService {
     const historyItem = this.historySearch().find((item) => item[query])!;
     const gifsFromHistory = historyItem[query];
 
-    this.searchResults.set(gifsFromHistory);
+    this.gifs.set(gifsFromHistory);
   }
 
   private updateHistory(query: string, gifs: Gif[]) {
@@ -96,7 +95,7 @@ export class GifService {
     });
 
     // update menu history keys
-    this.menuHistory.update(
+    this.historyMenu.update(
       (history) => [query, ...history].splice(0, 5) // splice last 5 items searched
     );
   }
