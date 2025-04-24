@@ -1,11 +1,10 @@
 import { Component, computed, inject, input } from '@angular/core';
-import { GifListItemComponent } from '../../components/gif-list/gif-list-item/gif-list-item.component';
 import { GifListComponent } from '../../components/gif-list/gif-list.component';
 import { GifService } from '../../services/gif.service';
 
 @Component({
   selector: 'app-gifs-history-page',
-  imports: [GifListItemComponent, GifListComponent],
+  imports: [GifListComponent],
   templateUrl: './gifs-history-page.component.html',
   styles: ``,
 })
