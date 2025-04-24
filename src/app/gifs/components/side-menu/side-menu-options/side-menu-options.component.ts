@@ -1,3 +1,4 @@
+import { TitleCasePipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { GifService } from 'src/app/gifs/services/gif.service';
@@ -11,7 +12,7 @@ interface MenuOption {
 
 @Component({
   selector: 'gifs-side-menu-options',
-  imports: [RouterLink, RouterLinkActive],
+  imports: [RouterLink, RouterLinkActive, TitleCasePipe],
   templateUrl: './side-menu-options.component.html',
   styles: ``,
 })
@@ -32,8 +33,4 @@ export class SideMenuOptionsComponent {
       route: '/dashboard/search',
     },
   ];
-
-  searchFromHistory(item: string) {
-    this.gifService.searchGifs(item);
-  }
 }

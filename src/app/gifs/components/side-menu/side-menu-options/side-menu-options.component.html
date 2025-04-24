@@ -21,4 +21,24 @@
     </div>
   </a>
   }
+
+  <!-- History -->
+  @for(key of gifService.searchHistoryKeys(); track key){
+  <a
+    [routerLink]="['history', key]"
+    routerLinkActive="bg-blue-800"
+    [routerLinkActiveOptions]="{ exact: true }"
+    class="inline-flex items-center space-x-2 hover:bg-white/5 px-2 py-3 border-slate-700 border-b w-full transition duration-150 ease-linear"
+  >
+    <div>
+      <i [class]="'fa fa-history'"></i>
+    </div>
+
+    <div class="flex flex-col">
+      <span class="font-bold text-white text-lg leading-5">{{
+        key | titlecase
+      }}</span>
+    </div>
+  </a>
+  }
 </div>
