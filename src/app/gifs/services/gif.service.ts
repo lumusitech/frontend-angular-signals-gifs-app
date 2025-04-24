@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { computed, effect, inject, Injectable, signal } from '@angular/core';
+import { Router } from '@angular/router';
 import { environment } from '@environments/environment';
 import { map, Observable, tap } from 'rxjs';
 import { Gif } from '../interfaces/gif.interface';
@@ -8,29 +9,18 @@ import { GifMapper } from '../mappers/gif.mapper';
 
 const GIF_KEY = 'gifs';
 
-const loadFromLocalStorage = () => {
-  const gifsFromLoacalStorage = localStorage.getItem(GIF_KEY) ?? '{}';
-
-  try {
-    const gifs = JSON.parse(gifsFromLoacalStorage);
-    return gifs ?? {};
-  } catch (error) {
-    localStorage.removeItem(GIF_KEY);
-    return {};
-  }
-};
-
 @Injectable({
   providedIn: 'root',
 })
 export class GifService {
   private http = inject(HttpClient);
+  private router = inject(Router);
 
   trendingGifs = signal<Gif[]>([]);
   trendingGifsLoading = signal(true);
 
   gifs = signal<Gif[]>([]);
-  searchHistory = signal<Record<string, Gif[]>>(loadFromLocalStorage());
+  searchHistory = signal<Record<string, Gif[]>>(this.getFromLocalStorage());
   searchHistoryKeys = computed(() => Object.keys(this.searchHistory()));
 
   constructor() {
@@ -38,7 +28,7 @@ export class GifService {
   }
 
   saveGifsToLocalStorage = effect(() => {
-    localStorage.setItem(GIF_KEY, JSON.stringify(this.searchHistory()));
+    this.saveToLocalStorage(GIF_KEY, this.searchHistory());
   });
 
   loadTrendingGifs(): void {
@@ -81,5 +71,22 @@ export class GifService {
 
   getHistoryGifs(query: string): Gif[] {
     return this.searchHistory()[query.toLowerCase().trim()] ?? [];
+  }
+
+  private getFromLocalStorage(): Record<string, Gif[]> {
+    const gifsFromLoacalStorage = localStorage.getItem(GIF_KEY) ?? '{}';
+
+    try {
+      const gifs: Record<string, Gif[]> = JSON.parse(gifsFromLoacalStorage);
+      return gifs ?? {};
+    } catch (error) {
+      localStorage.removeItem(GIF_KEY);
+      this.router.navigate(['dashboard']);
+      return {};
+    }
+  }
+
+  private saveToLocalStorage(key: string, gifs: Record<string, Gif[]>): void {
+    localStorage.setItem(key, JSON.stringify(gifs));
   }
 }
