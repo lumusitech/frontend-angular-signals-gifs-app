@@ -1,3 +1,17 @@
-<section class="py-5">
+<!-- Simple design -->
+<!-- <section class="py-5">
   <gifs-list [gifs]="gifService.trendingGifs()" />
-</section>
+</section> -->
+
+<!-- Masonry design -->
+<div class="gap-4 grid grid-cols-2 md:grid-cols-4 pt-5">
+  @for (group of gifService.trendingGifsGroup(); track $index) {
+  <div class="gap-4 grid">
+    @for(gif of group; track $index){
+    <div>
+      <img class="rounded-lg w-full h-full" [src]="gif.url" [alt]="gif.title" />
+    </div>
+    }
+  </div>
+  }
+</div>

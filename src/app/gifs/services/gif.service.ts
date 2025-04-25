@@ -19,6 +19,13 @@ export class GifService {
   trendingGifs = signal<Gif[]>([]);
   trendingGifsLoading = signal(true);
 
+  // [[gif,gif,gif],[gif,gif,gif],[gif,gif,gif],[gif,gif,gif],[gif,gif,gif]]
+  trendingGifsGroup = computed<Gif[][]>(() => {
+    const groups = this.groupArray(this.trendingGifs(), 3);
+    console.log({ groups });
+    return groups;
+  });
+
   gifs = signal<Gif[]>([]);
   searchHistory = signal<Record<string, Gif[]>>(this.getFromLocalStorage());
   searchHistoryKeys = computed(() => Object.keys(this.searchHistory()));
@@ -30,6 +37,15 @@ export class GifService {
   saveGifsToLocalStorage = effect(() => {
     this.saveToLocalStorage(GIF_KEY, this.searchHistory());
   });
+
+  groupArray(arreglo: Gif[], n: number): Gif[][] {
+    const resultado: Gif[][] = [];
+    for (let i = 0; i < arreglo.length; i += n) {
+      const grupo = arreglo.slice(i, i + n);
+      resultado.push(grupo);
+    }
+    return resultado;
+  }
 
   loadTrendingGifs(): void {
     this.http
