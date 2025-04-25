@@ -4,8 +4,17 @@
 </section> -->
 
 <!-- Masonry design -->
+@if(gifService.trendingGifsGroup().length === 0){
 <div
-  class="gap-4 grid grid-cols-2 md:grid-cols-4 bg-red-600 pt-5 h-screen overflow-y-scroll"
+  class="flex justify-center bg-red-300 mt-5 p-4 border border-red-600 rounded-2xl w-full"
+>
+  <h2 class="font-bold text-2xl">
+    No hay gifs en la base de datos o se excedió el límite gratuito de giphy API
+  </h2>
+</div>
+} @else {
+<div
+  class="gap-4 grid grid-cols-2 md:grid-cols-4 pt-5 h-screen overflow-y-scroll"
   (scroll)="onScroll($event)"
   #groupDiv
 >
@@ -19,3 +28,4 @@
   </div>
   }
 </div>
+}
