@@ -48,6 +48,8 @@ Temas practicados en este proyecto:
 
 ## Scroll Infinito
 
+Trending Page Component:
+
 ```typescript
 import { Component, ElementRef, inject, viewChild } from "@angular/core";
 
@@ -55,12 +57,12 @@ import { GifService } from "../../services/gif.service";
 
 @Component({
   selector: "gifs-trending-page",
-  // imports: [GifListComponent],
   templateUrl: "./trending-page.component.html",
   styles: ``,
 })
 export default class TrendingPageComponent {
   gifService = inject(GifService);
+  trendingGifsInfinite = this.gifService.trendingGifs();
 
   scrollDivRef = viewChild<ElementRef<HTMLDivElement>>("groupDiv");
 
@@ -76,10 +78,56 @@ export default class TrendingPageComponent {
     const scrollTop = scrollDiv.scrollTop;
     const clientHeight = scrollDiv.clientHeight;
     const scrollHeight = scrollDiv.scrollHeight;
+    // Pixels before the bottom to trigger the infinite scroll
+    // With this, you can adjust the distance from the bottom to trigger the infinite scroll
+    const fireLoadingBefore = 300;
 
-    if (scrollTop + clientHeight >= scrollHeight) {
-      console.log("load more gifs");
+    const isAtBottom: boolean = scrollTop + clientHeight + fireLoadingBefore >= scrollHeight;
+
+    if (isAtBottom) {
+      this.gifService.loadTrendingGifs();
     }
+  }
+}
+```
+
+Service:
+
+```typescript
+@Injectable({
+  providedIn: "root",
+})
+export class GifService {
+  private http = inject(HttpClient);
+  private router = inject(Router);
+
+  trendingGifs = signal<Gif[]>([]);
+  trendingGifsLoading = signal(false);
+  private trendingPage = signal(0);
+
+  // other methods
+
+  loadTrendingGifs(): void {
+    // While loading trending gifs don't load more, don't request more
+    if (this.trendingGifsLoading()) return;
+
+    // when loading is false, set loading to true for the next request
+    this.trendingGifsLoading.set(true);
+
+    this.http
+      .get<GiphyResponse>(`${environment.giphyBaseUrl}/gifs/trending`, {
+        params: {
+          api_key: environment.giphyApiKey,
+          limit: "20",
+          offset: (this.trendingPage() * 20).toString(),
+        },
+      })
+      .subscribe((resp) => {
+        const newGifs = GifMapper.mapGiphyItemsToGifArray(resp.data);
+        this.trendingGifs.update((currentGifs) => [...currentGifs, ...newGifs]);
+        this.trendingPage.update((currentPage) => currentPage + 1);
+        this.trendingGifsLoading.set(false);
+      });
   }
 }
 ```
